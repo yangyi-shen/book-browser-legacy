@@ -1,3 +1,3 @@
 # Book Browser 📚
 
-All the major online bookstores, one searchbar
+A website that helps you search all the major online bookstores at once for the best deals.
