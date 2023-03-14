@@ -1,0 +1,23 @@
+{
+  "name": "book-browser",
+  "version": "1.0.0",
+  "description": "A website that helps you search all the major online bookstores at once for the best deals.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yang-Yi-Shen/book-browser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yang-Yi-Shen/book-browser/issues"
+  },
+  "homepage": "https://github.com/Yang-Yi-Shen/book-browser#readme",
+  "dependencies": {
+    "create-react-app": "^5.0.1"
+  }
+}
