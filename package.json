@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Yang-Yi-Shen/book-browser#readme",
   "dependencies": {
-    "create-react-app": "^5.0.1"
+    "create-react-app": "^5.0.1",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.21"
   }
 }
