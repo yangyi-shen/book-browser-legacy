@@ -4,7 +4,7 @@ A website that helps you search all the major online bookstores at once for the 
 
 ## Todo:
 
-- [ ] Figure out how to web scrape major online bookstores (BetterWorldBooks, AbeBooks, Amazon Books)
+- [x] (sorta) Figure out how to web scrape major online bookstores (BetterWorldBooks, AbeBooks, Amazon Books)
 
 - [ ] Process web scraped data into list of books sorted by price
 
