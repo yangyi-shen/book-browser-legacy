@@ -14,16 +14,20 @@ app.use((req, res, next) => {
 });
 app.use(express.static('dist'));
 
-async function getBWB(query) {
+//function for scraping Thriftbooks
+async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
     try {
-        const escapedQuery = encodeURI(query);
-        const response = await axios.get(`https://news.ycombinator.com`);
+        // const escapedQuery = encodeURI(query);
+        const response = await axios.get(`https://www.thriftbooks.com/browse/?b.search=${query}#b.s=mostPopular-desc&b.p=1&b.pp=30&b.oos&b.tile`);
         const $ = cheerio.load(response.data);
         let pageTitles = '';
 
         // use cheerio to extract data from response
-        $('.titleline > a').each(function () {
-            pageTitles += (`<h3>${$(this).text()}</h3>`);
+        $(path).each(function (index) {
+            if (index >= 5) {
+                return false;
+            }
+            pageTitles += (`<p>${$(this).text()}</p>`);
         });
 
         return pageTitles;
@@ -35,8 +39,11 @@ async function getBWB(query) {
 
 app.get('/', async (req, res) => {
     try {
-        const data = await getBWB('amongus');
-        res.send(data);
+        const thriftbooks = await getThriftBooks('trump');
+        res.send(`
+            <h2>ThriftBooks:</h2> 
+            ${thriftbooks}
+        `);
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
