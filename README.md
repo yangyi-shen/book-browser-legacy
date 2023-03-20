@@ -7,7 +7,7 @@ A website that helps you search all the major online bookstores at once for the 
 - [x] (sorta) Figure out how to web scrape major online bookstores
 - - [ ] BetterWorldBooks
 - - [ ] AbeBooks
-- - [ ] Amazon Books
+- - [x] Amazon Books
 - - [x] ThriftBooks
 - - [x] Book Depository
 
