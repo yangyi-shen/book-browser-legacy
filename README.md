@@ -13,7 +13,7 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [x] Process web scraped data into list of books
 
-- [ ] Make API to process multiple different queries, not just a set one
+- [x] Make API to process multiple different queries, not just a set one
 
 - [ ] Sort books by price
 
