@@ -83,11 +83,29 @@ async function getAmazonBooks(query, path = 'h2 a span') {
     }
 }
 
+//api to send info to frontend
+app.get('/api', async (req, res) => {
+    try {
+        const bookDepo = await getBookDepo('trump');
+        const bookDepoList = bookDepo.map(book => `<p>${book}</p>`).join('');
+        const amazonBooks = await getAmazonBooks('trump');
+        const amazonBooksList = amazonBooks.map(book => `<p>${book}</p>`).join('');
+
+        res.json({
+            bookDepo: bookDepoList,
+            amazonBooks: amazonBooksList,
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send({ error: error.message });
+    }
+})
+
 //route for homepage
 app.get('/', async (req, res) => {
     try {
-        const bookdepo = await getBookDepo('trump');
-        const bookdepoList = bookdepo.map(book => `<p>${book}</p>`).join('');
+        const bookDepo = await getBookDepo('trump');
+        const bookDepoList = bookDepo.map(book => `<p>${book}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book}</p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
@@ -96,7 +114,7 @@ app.get('/', async (req, res) => {
 
         res.send(`
             <h2>Book Depository:</h2> 
-            ${bookdepoList}
+            ${bookDepoList}
             <h2>Amazon Books:</h2>
             ${amazonBooksList}
         `);
