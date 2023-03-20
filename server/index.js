@@ -86,13 +86,23 @@ async function getAmazonBooks(query, path = 'h2 a span') {
 //api to send info to frontend
 app.get('/api', async (req, res) => {
     try {
-        const bookDepo = await getBookDepo('trump');
-        const amazonBooks = await getAmazonBooks('trump');
+        if (req.query.q != undefined) {
+            const bookDepo = await getBookDepo(req.query.q);
+            const amazonBooks = await getAmazonBooks(req.query.q);
 
-        res.json({
-            bookDepo: bookDepo,
-            amazonBooks: amazonBooks,
-        })
+            res.json({
+                bookDepo: bookDepo,
+                amazonBooks: amazonBooks,
+            })
+        } else {
+            const bookDepo = await getBookDepo('trump');
+            const amazonBooks = await getAmazonBooks('trump');
+
+            res.json({
+                bookDepo: bookDepo,
+                amazonBooks: amazonBooks,
+            })
+        }
 
     } catch (error) {
         console.log(error.message)
