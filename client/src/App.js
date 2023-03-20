@@ -3,20 +3,38 @@ import { useState, useEffect }from 'react';
 import './App.css';
 
 function App() {
-  const [username, setUsername] = useState(null)
+  const [bookList, setBookList] = useState({})
 
   useEffect(() => {
-    fetch('http://localhost:6900/api/getUsername/')
-      .then(res => res.json())
-      .then(user => setUsername(user.username))
+    async function fetchData() {
+      await fetch('http://localhost:6900/api')
+      .then(response => response.json())
+      .then(booklist => {
+        setBookList(booklist)
+        console.log(booklist.amazonBooks, booklist.bookDepo)
+      })
       .catch(error => console.error(error))
+    }
+
+    fetchData();
   }, [])
 
-  return (
-    <div className="App">
-      {username ? <h1>{username}</h1> : <h1>test unsuccesful</h1>}
-    </div>
-  );
+  if (bookList.amazonBooks) {
+    return (
+      <div className='App'>
+        <h2>Amazon Books:</h2>
+        {bookList.amazonBooks.map(book => <p>{book}</p>)}
+        <h2>Book Depository:</h2>
+        {bookList.bookDepo.map(book => <p>{book}</p>)}
+      </div>
+    )
+  } else {
+    return (
+      <div className='App'>
+        <h2>loading...</h2>
+      </div>
+    )
+  }
 }
 
 export default App;
