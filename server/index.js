@@ -17,8 +17,8 @@ app.use(express.static('dist'));
 //function for scraping Thriftbooks
 async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
     try {
-        // const escapedQuery = encodeURI(query);
-        const response = await axios.get(`https://www.thriftbooks.com/browse/?b.search=${query}#b.s=mostPopular-desc&b.p=1&b.pp=30&b.oos&b.tile`);
+        const escapedQuery = encodeURI(query);
+        const response = await axios.get(`https://www.thriftbooks.com/browse/?b.search=${escapedQuery}#b.s=mostPopular-desc&b.p=1&b.pp=30&b.oos&b.tile`);
         const $ = cheerio.load(response.data);
         let pageTitles = '';
 
@@ -37,14 +37,39 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
     }
 }
 
+//function for scraping Book Depository
+async function getBookDepo(query, path = '.title > a') {
+    try {
+        const escapedQuery = encodeURI(query);
+        const response = await axios.get(`https://www.bookdepository.com/search?searchTerm=${query}&search=Find+book`);
+        const $ = cheerio.load(response.data);
+        let pageTitles = '';
+
+        // use cheerio to extract data from response
+        $(path).each(function (index) {
+            if (index >= 5) {
+                return false;
+            }
+            pageTitles += (`<p>${$(this).text()}</p>`);
+        });
+
+        return pageTitles;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+//route for homepage
 app.get('/', async (req, res) => {
     try {
-        const thriftbooks = await getThriftBooks('trump');
+        const thriftbooks = await getBookDepo('trump');
         res.send(`
             <h2>ThriftBooks:</h2> 
             ${thriftbooks}
         `);
     } catch (error) {
+        console.log(error.message)
         res.status(500).send({ error: error.message });
     }
 });
