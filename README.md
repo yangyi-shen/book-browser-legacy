@@ -8,8 +8,8 @@ A website that helps you search all the major online bookstores at once for the 
 - - [ ] BetterWorldBooks
 - - [ ] AbeBooks
 - - [ ] Amazon Books
-- - [x] ThriftBooks (other bookstores have anti-scraping code)
-- - [ ] Book Depository
+- - [x] ThriftBooks
+- - [x] Book Depository
 
 - [ ] Process web scraped data into list of books sorted by price
 
