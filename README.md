@@ -11,7 +11,7 @@ A website that helps you search all the major online bookstores at once for the 
 - - [x] ThriftBooks
 - - [x] Book Depository
 
-- [ ] Process web scraped data into list of books sorted by price
+- [x] Process web scraped data into list of books
 
 - [ ] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
 
