@@ -52,7 +52,7 @@ async function getBookDepo(query, path = '.title > a') {
             }
             pageTitles.push($(this).text());
         });
-
+        
         return pageTitles;
     } catch (error) {
         console.error(error);
@@ -87,14 +87,13 @@ async function getAmazonBooks(query, path = 'h2 a span') {
 app.get('/api', async (req, res) => {
     try {
         const bookDepo = await getBookDepo('trump');
-        const bookDepoList = bookDepo.map(book => `<p>${book}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
-        const amazonBooksList = amazonBooks.map(book => `<p>${book}</p>`).join('');
 
         res.json({
-            bookDepo: bookDepoList,
-            amazonBooks: amazonBooksList,
+            bookDepo: bookDepo,
+            amazonBooks: amazonBooks,
         })
+
     } catch (error) {
         console.log(error.message)
         res.status(500).send({ error: error.message });
