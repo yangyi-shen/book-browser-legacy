@@ -20,14 +20,14 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
         const escapedQuery = encodeURI(query);
         const response = await axios.get(`https://www.thriftbooks.com/browse/?b.search=${escapedQuery}#b.s=mostPopular-desc&b.p=1&b.pp=30&b.oos&b.tile`);
         const $ = cheerio.load(response.data);
-        let pageTitles = '';
+        let pageTitles = [];
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
             if (index >= 5) {
                 return false;
             }
-            pageTitles += (`<p>${$(this).text()}</p>`);
+            pageTitles.push($(this).text());
         });
 
         return pageTitles;
@@ -43,14 +43,14 @@ async function getBookDepo(query, path = '.title > a') {
         const escapedQuery = encodeURI(query);
         const response = await axios.get(`https://www.bookdepository.com/search?searchTerm=${query}&search=Find+book`);
         const $ = cheerio.load(response.data);
-        let pageTitles = '';
+        let pageTitles = [];
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
             if (index >= 5) {
                 return false;
             }
-            pageTitles += (`<p>${$(this).text()}</p>`);
+            pageTitles.push($(this).text());
         });
 
         return pageTitles;
@@ -63,10 +63,15 @@ async function getBookDepo(query, path = '.title > a') {
 //route for homepage
 app.get('/', async (req, res) => {
     try {
-        const thriftbooks = await getBookDepo('trump');
+        const bookdepo = await getBookDepo('trump');
+        const bookdepoList = bookdepo.map(book => `<p>${book}</p>`).join('');
+        // thriftbooks goddamned added a captcha so this doesn't work no more
+        // const thriftbooks = await getThriftBooks('trump');
+        // const thriftbooksList = thriftbooks.map(book => `<p>${book}</p>`).join('');
+
         res.send(`
-            <h2>ThriftBooks:</h2> 
-            ${thriftbooks}
+            <h2>Book Depository:</h2> 
+            ${bookdepoList}
         `);
     } catch (error) {
         console.log(error.message)
