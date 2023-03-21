@@ -19,7 +19,7 @@ function App() {
 
   //get search results for trump on load
   useEffect(() => {
-    fetchData();
+    fetchData('trump');
   }, [])
 
   function handleChange(event) {
