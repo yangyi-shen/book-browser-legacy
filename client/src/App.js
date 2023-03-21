@@ -1,6 +1,7 @@
 
 import { useState, useEffect }from 'react';
 import './App.css';
+import BookItem from './components/BookItem';
 
 function App() {
   const [bookList, setBookList] = useState({})
@@ -36,9 +37,9 @@ function App() {
         <input type='text' value={query} onChange={handleChange} />
         <button type='button' onClick={handleSubmit}>Search</button>
         <h2>Amazon Books:</h2>
-        {bookList.amazonBooks.map(book => <p>{book}</p>)}
+        {bookList.amazonBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} />)}
         <h2>Book Depository:</h2>
-        {bookList.bookDepo.map(book => <p>{book}</p>)}
+        {bookList.bookDepo.map(book => <BookItem image={book.image} title={book.title} price={book.price} />)}
       </div>
     )
   } else {
