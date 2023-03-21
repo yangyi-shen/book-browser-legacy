@@ -19,4 +19,6 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [ ] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
 
+- [ ] Add loading icon when search query is being processed
+
 - [ ] Test and release version 0.9.1
