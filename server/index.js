@@ -83,6 +83,38 @@ async function getAmazonBooks(query, path = 'h2 a span') {
     }
 }
 
+//modified function to get price and img as well
+async function getAmazonBooks(query, path = '.s-card-container .a-section .sg-row') {
+    try {
+        const escapedQuery = encodeURI(query);
+        const response = await axios.get(`https://www.amazon.com/s?k=${escapedQuery}&i=stripbooks-intl-ship&crid=7UFCKN157B57&sprefix=tr%2Cstripbooks-intl-ship%2C275&ref=nb_sb_noss_2`);
+        const $ = cheerio.load(response.data);
+        let pageTitles = [];
+
+        // use cheerio to extract data from response
+        $(path).each(function (index) {
+            if (index >= 5) {
+                return false;
+            }
+
+            const image = $(this).find('img').attr('src');
+            const title = $(this).find('h2 a span').text();
+            const price = `${$(this).find('span.a-price-whole').text()}`
+
+            pageTitles.push({
+                image,
+                title,
+                price,
+            });
+        });
+
+        return pageTitles;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 //api to send info to frontend
 app.get('/api', async (req, res) => {
     try {
@@ -116,7 +148,7 @@ app.get('/', async (req, res) => {
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
-        const amazonBooksList = amazonBooks.map(book => `<p>${book}</p>`).join('');
+        const amazonBooksList = amazonBooks.map(book => `<p>${book.title}</p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
         // const thriftbooks = await getThriftBooks('trump');
         // const thriftbooksList = thriftbooks.map(book => `<p>${book}</p>`).join('');
