@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 });
 app.use(express.static('dist'));
 
-//function for scraping Thriftbooks
+//function for scraping Thriftbooks (not working cos of captchas)
 async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
     try {
         const escapedQuery = encodeURI(query);
@@ -38,7 +38,7 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
 }
 
 //function for scraping Book Depository
-async function getBookDepo(query, path = '.title > a') {
+async function getBookDepo(query, path = '.book-item') {
     try {
         const escapedQuery = encodeURI(query);
         const response = await axios.get(`https://www.bookdepository.com/search?searchTerm=${escapedQuery}&search=Find+book`);
@@ -50,7 +50,16 @@ async function getBookDepo(query, path = '.title > a') {
             if (index >= 5) {
                 return false;
             }
-            pageTitles.push($(this).text());
+
+            const image = $(this).find('.item-img img').attr('src');
+            const title = $(this).find('.title a').text();
+            const price = `${$(this).find('.price  .sale-price').text()}`
+
+            pageTitles.push({
+                image,
+                title,
+                price,
+            });
         });
         
         return pageTitles;
@@ -123,7 +132,7 @@ app.get('/api', async (req, res) => {
 app.get('/', async (req, res) => {
     try {
         const bookDepo = await getBookDepo('trump');
-        const bookDepoList = bookDepo.map(book => `<p>${book}</p>`).join('');
+        const bookDepoList = bookDepo.map(book => `<p>${book.title}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book.title}</p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
