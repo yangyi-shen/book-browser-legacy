@@ -60,29 +60,6 @@ async function getBookDepo(query, path = '.title > a') {
     }
 }
 
-//function for scraping Amazon Books
-async function getAmazonBooks(query, path = 'h2 a span') {
-    try {
-        const escapedQuery = encodeURI(query);
-        const response = await axios.get(`https://www.amazon.com/s?k=${escapedQuery}&i=stripbooks-intl-ship&crid=7UFCKN157B57&sprefix=tr%2Cstripbooks-intl-ship%2C275&ref=nb_sb_noss_2`);
-        const $ = cheerio.load(response.data);
-        let pageTitles = [];
-
-        // use cheerio to extract data from response
-        $(path).each(function (index) {
-            if (index >= 5) {
-                return false;
-            }
-            pageTitles.push($(this).text());
-        });
-
-        return pageTitles;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
 //modified function to get price and img as well
 async function getAmazonBooks(query, path = '.s-card-container .a-section .sg-row') {
     try {
