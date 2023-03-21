@@ -128,7 +128,7 @@ app.get('/api', async (req, res) => {
     }
 })
 
-//route for homepage
+//localhost:6900 route for testing purposes. for final product go to localhost:3000
 app.get('/', async (req, res) => {
     try {
         const bookDepo = await getBookDepo('trump');
