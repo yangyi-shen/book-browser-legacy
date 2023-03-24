@@ -109,7 +109,6 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             });
         });
 
-        console.log(pageTitles)
         return pageTitles;
     } catch (error) {
         console.error(error);
