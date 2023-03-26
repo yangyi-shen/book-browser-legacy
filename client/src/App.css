@@ -1,0 +1,22 @@
+.book-item {
+    width: 200px;
+    display: inline-flex;
+    flex-direction: column;
+    margin: 0px 10px;
+}
+
+.blue {
+    color: #007185;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.book-image {
+    width: 200px;
+    height: 300px;
+    object-fit: scale-down;
+    background-color: #F5F5F5;
+    border: 1px solid #DDDDDD;
+}
