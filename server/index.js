@@ -86,6 +86,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             const image = $(this).find('img').attr('src');
             const title = $(this).find('h2 a span').text();
 
+            //big chunk of code to come up with price
             let priceList = [];
             $(this).find('.s-underline-link-text > .a-price .a-offscreen').each(function () {
                 priceList.push($(this).text())
@@ -94,20 +95,31 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             $(this).find('.a-size-base.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-bold').each(function () {
                 typeList.push($(this).text())
             });
-            let priceHolder = priceList.map((price, index) => {
-                return {
-                    price: price,
-                    type: typeList[index],
-                }
+            let priceHolder = []
+            priceList.map((price, index) => {
+                priceHolder[`${typeList[index]}`] = price;
             })
-            const price = priceHolder;
 
-            pageTitles.push({
-                image: image,
-                title: title,
-                price: price,
-            });
+            if (priceHolder['Paperback']) {
+                pageTitles.push({
+                    image: image,
+                    title: title,
+                    price: priceHolder['Paperback'],
+                    type: 'Paperback',
+                });
+            }
+
+            if (priceHolder['Hardcover']) {
+                pageTitles.push({
+                    image: image,
+                    title: title,
+                    price: priceHolder['Hardcover'],
+                    type: 'Hardcover',
+                });
+            }
         });
+
+        console.log(pageTitles);
 
         return pageTitles;
     } catch (error) {
@@ -147,9 +159,9 @@ app.get('/api', async (req, res) => {
 app.get('/', async (req, res) => {
     try {
         const bookDepo = await getBookDepo('trump');
-        const bookDepoList = bookDepo.map(book => `<p>${book.title}</p>`).join('');
+        const bookDepoList = bookDepo.map(book => `<p>${book.title} ${book.price}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
-        const amazonBooksList = amazonBooks.map(book => `<p>${book.title} ${book.price.map(item => `<br>${item.price} ${item.type}`)}</p>`).join('');
+        const amazonBooksList = amazonBooks.map(book => `<p>${book.title} ${book.type} ${book.price}</p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
         // const thriftbooks = await getThriftBooks('trump');
         // const thriftbooksList = thriftbooks.map(book => `<p>${book}</p>`).join('');
