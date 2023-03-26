@@ -54,11 +54,13 @@ async function getBookDepo(query, path = '.book-item') {
             const image = $(this).find('.item-img img').attr('src');
             const title = $(this).find('.title a').text();
             const price = $(this).find('.price  .sale-price').text();
+            const format = $(this).find('.format').text();
 
             pageTitles.push({
                 image: image,
                 title: title,
                 price: price,
+                format: format,
             });
         });
         
@@ -159,7 +161,7 @@ app.get('/api', async (req, res) => {
 app.get('/', async (req, res) => {
     try {
         const bookDepo = await getBookDepo('trump');
-        const bookDepoList = bookDepo.map(book => `<p>${book.title} ${book.price}</p>`).join('');
+        const bookDepoList = bookDepo.map(book => `<p>${book.title} ${book.format} ${book.price}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book.title} ${book.format} ${book.price}</p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
