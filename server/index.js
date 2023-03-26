@@ -91,13 +91,13 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             $(this).find('.s-underline-link-text > .a-price .a-offscreen').each(function () {
                 priceList.push($(this).text())
             });
-            let typeList = []
+            let formatList = []
             $(this).find('.a-size-base.a-link-normal.s-underline-text.s-underline-link-text.s-link-style.a-text-bold').each(function () {
-                typeList.push($(this).text())
+                formatList.push($(this).text())
             });
             let priceHolder = []
             priceList.map((price, index) => {
-                priceHolder[`${typeList[index]}`] = price;
+                priceHolder[`${formatList[index]}`] = price;
             })
 
             if (priceHolder['Paperback']) {
@@ -105,7 +105,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                     image: image,
                     title: title,
                     price: priceHolder['Paperback'],
-                    type: 'Paperback',
+                    format: 'Paperback',
                 });
             }
 
@@ -114,7 +114,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                     image: image,
                     title: title,
                     price: priceHolder['Hardcover'],
-                    type: 'Hardcover',
+                    format: 'Hardcover',
                 });
             }
         });
@@ -161,7 +161,7 @@ app.get('/', async (req, res) => {
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book.title} ${book.price}</p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
-        const amazonBooksList = amazonBooks.map(book => `<p>${book.title} ${book.type} ${book.price}</p>`).join('');
+        const amazonBooksList = amazonBooks.map(book => `<p>${book.title} ${book.format} ${book.price}</p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
         // const thriftbooks = await getThriftBooks('trump');
         // const thriftbooksList = thriftbooks.map(book => `<p>${book}</p>`).join('');
