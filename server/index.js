@@ -55,12 +55,14 @@ async function getBookDepo(query, path = '.book-item') {
             const title = $(this).find('.title a').text();
             const price = $(this).find('.price  .sale-price').text();
             const format = $(this).find('.format').text();
+            const author = $(this).find('p.author span a span').text();
 
             pageTitles.push({
                 image: image,
                 title: title,
                 price: price,
                 format: format,
+                author: author,
             });
         });
         
@@ -87,8 +89,9 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
 
             const image = $(this).find('img').attr('src');
             const title = $(this).find('h2 a span').text();
+            const author = $(this).find('div.a-row.a-color-secondary > div.a-row > .a-size-base').slice(0, 2).text();
 
-            //big chunk of code to come up with price
+            //big chunk of code to come up with price and format
             let priceList = [];
             $(this).find('.s-underline-link-text > .a-price .a-offscreen').each(function () {
                 priceList.push($(this).text())
@@ -108,6 +111,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                     title: title,
                     price: priceHolder['Paperback'],
                     format: 'Paperback',
+                    author: author,
                 });
             }
 
@@ -117,6 +121,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                     title: title,
                     price: priceHolder['Hardcover'],
                     format: 'Hardcover',
+                    author: author,
                 });
             }
         });
@@ -161,9 +166,9 @@ app.get('/api', async (req, res) => {
 app.get('/', async (req, res) => {
     try {
         const bookDepo = await getBookDepo('trump');
-        const bookDepoList = bookDepo.map(book => `<p>${book.title} ${book.format} ${book.price}</p>`).join('');
+        const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
-        const amazonBooksList = amazonBooks.map(book => `<p>${book.title} ${book.format} ${book.price}</p>`).join('');
+        const amazonBooksList = amazonBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
         // thriftbooks goddamned added a captcha so this doesn't work no more
         // const thriftbooks = await getThriftBooks('trump');
         // const thriftbooksList = thriftbooks.map(book => `<p>${book}</p>`).join('');
