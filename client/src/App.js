@@ -13,7 +13,6 @@ function App() {
     .then(response => response.json())
     .then(booklist => {
       setBookList(booklist)
-      console.log(booklist.amazonBooks, booklist.bookDepo)
     })
     .catch(error => console.error(error))
   }
@@ -37,8 +36,8 @@ function App() {
         <input type='text' value={query} onChange={handleChange} />
         <button type='button' onClick={handleSubmit}>Search</button>
 
-        <h2>ThriftBooks:</h2>
-        {bookList.thriftBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} />)}
+        {/* <h2>ThriftBooks:</h2>
+        {bookList.thriftBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} />)} */}
         <h2>Amazon Books:</h2>
         {bookList.amazonBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} />)}
         <h2>Book Depository:</h2>

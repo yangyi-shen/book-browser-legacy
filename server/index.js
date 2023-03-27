@@ -152,22 +152,22 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
 app.get('/api', async (req, res) => {
     try {
         if (req.query.q != undefined) {
-            const thriftBooks = await getThriftBooks(req.query.q);
+            // const thriftBooks = await getThriftBooks(req.query.q);
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
 
             res.json({
-                thriftBooks: thriftBooks,
+                // thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
             })
         } else {
-            const thriftBooks = await getThriftBooks('trump');
+            // const thriftBooks = await getThriftBooks('trump');
             const bookDepo = await getBookDepo('trump');
             const amazonBooks = await getAmazonBooks('trump');
 
             res.json({
-                thriftBooks: thriftBooks,
+                // thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
             })
@@ -182,8 +182,8 @@ app.get('/api', async (req, res) => {
 //localhost:6900 route for testing purposes. for final product go to localhost:3000
 app.get('/', async (req, res) => {
     try {
-        const thriftbooks = await getThriftBooks('trump');
-        const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+        // const thriftbooks = await getThriftBooks('trump');
+        // const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
@@ -195,7 +195,7 @@ app.get('/', async (req, res) => {
             <h2>Amazon Books:</h2>
             ${amazonBooksList}
             <h2>ThriftBooks:</h2>
-            ${thriftbooksList}
+            {thriftbooksList}
         `);
     } catch (error) {
         console.log(error.message)
