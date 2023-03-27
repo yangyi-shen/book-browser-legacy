@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 app.use(express.static('dist'));
 
 //function for scraping Thriftbooks (not working cos of captchas)
-async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
+async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
     try {
         const escapedQuery = encodeURI(query);
         const response = await axios.get(`https://www.thriftbooks.com/browse/?b.search=${escapedQuery}#b.s=mostPopular-desc&b.p=1&b.pp=30&b.oos&b.tile`);
@@ -27,8 +27,23 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tileTitle > a') {
             if (index >= 5) {
                 return false;
             }
-            pageTitles.push($(this).text());
+
+            const image = $(this).find('.SearchResultTileItem-photo img').attr('src');
+            const title = $(this).find('.AllEditionsItem-tileTitle').text();
+            const price = $(this).find('.SearchResultListItem-dollarAmount').text();
+            const format = $(this).find('.SearchResultTileItem-format strong').text();
+            const author = $(this).find(`[itemprop = 'author']`).text();
+
+            pageTitles.push({
+                image: image,
+                title: title,
+                price: price,
+                format: format,
+                author: author,
+            })
         });
+
+        console.log(pageTitles)
 
         return pageTitles;
     } catch (error) {
@@ -126,8 +141,6 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             }
         });
 
-        console.log(pageTitles);
-
         return pageTitles;
     } catch (error) {
         console.error(error);
@@ -139,18 +152,22 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
 app.get('/api', async (req, res) => {
     try {
         if (req.query.q != undefined) {
+            const thriftBooks = await getThriftBooks(req.query.q);
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
 
             res.json({
+                thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
             })
         } else {
+            const thriftBooks = await getThriftBooks('trump');
             const bookDepo = await getBookDepo('trump');
             const amazonBooks = await getAmazonBooks('trump');
 
             res.json({
+                thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
             })
@@ -165,19 +182,20 @@ app.get('/api', async (req, res) => {
 //localhost:6900 route for testing purposes. for final product go to localhost:3000
 app.get('/', async (req, res) => {
     try {
+        const thriftbooks = await getThriftBooks('trump');
+        const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
-        // thriftbooks goddamned added a captcha so this doesn't work no more
-        // const thriftbooks = await getThriftBooks('trump');
-        // const thriftbooksList = thriftbooks.map(book => `<p>${book}</p>`).join('');
 
         res.send(`
             <h2>Book Depository:</h2> 
             ${bookDepoList}
             <h2>Amazon Books:</h2>
             ${amazonBooksList}
+            <h2>ThriftBooks:</h2>
+            ${thriftbooksList}
         `);
     } catch (error) {
         console.log(error.message)
