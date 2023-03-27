@@ -20,3 +20,17 @@
     background-color: #F5F5F5;
     border: 1px solid #DDDDDD;
 }
+
+.amazon-icon {
+    width: min-content;
+    height: 25px;
+    object-fit: scale-down;
+    padding: 5px;
+}
+
+.bookdepo-icon {
+    width: min-content;
+    height: 30px;
+    object-fit: scale-down;
+    padding: 5px;
+}
