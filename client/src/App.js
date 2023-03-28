@@ -36,9 +36,7 @@ function App() {
         <input type='text' value={query} onChange={handleChange} />
         <button type='button' onClick={handleSubmit}>Search</button>
         <main>
-          {/* {bookList.thriftBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} />)} */}
-          {bookList.amazonBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={'amazon'} />)}
-          {bookList.bookDepo.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={'bookdepo'} />)}
+          {bookList.allBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={book.bookstore} />)}
         </main>
       </div>
     )
