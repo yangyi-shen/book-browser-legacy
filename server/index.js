@@ -67,9 +67,9 @@ async function getBookDepo(query, path = '.book-item') {
             }
 
             const image = $(this).find('.item-img img').attr('src');
-            const title = $(this).find('.title a').text();
+            const title = $(this).find('.title a').text().replace('\n', '').trim();
             const price = $(this).find('.price  .sale-price').text();
-            const format = $(this).find('.format').text();
+            const format = $(this).find('.format').text().replace('\n', '').trim();
             const author = $(this).find('p.author span a span').text();
 
             pageTitles.push({
@@ -78,6 +78,7 @@ async function getBookDepo(query, path = '.book-item') {
                 price: price,
                 format: format,
                 author: author,
+                bookstore: 'bookdepo',
             });
         });
         
@@ -127,6 +128,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                     price: priceHolder['Paperback'],
                     format: 'Paperback',
                     author: author,
+                    bookstore: 'amazon',
                 });
             }
 
@@ -137,6 +139,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                     price: priceHolder['Hardcover'],
                     format: 'Hardcover',
                     author: author,
+                    bookstore: 'amazon',
                 });
             }
         });
@@ -148,6 +151,12 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
     }
 }
 
+function sortBooksByPrice(bookArray) {
+    return bookArray.sort(function (a, b) {
+      return parseFloat(a.price.replace(/[^0-9.-]+/g,"")) - parseFloat(b.price.replace(/[^0-9.-]+/g,""));
+    });
+}
+
 //api to send info to frontend
 app.get('/api', async (req, res) => {
     try {
@@ -155,21 +164,25 @@ app.get('/api', async (req, res) => {
             // const thriftBooks = await getThriftBooks(req.query.q);
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
+            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks))
 
             res.json({
                 // thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
+                allBooks: allBooks,
             })
         } else {
             // const thriftBooks = await getThriftBooks('trump');
             const bookDepo = await getBookDepo('trump');
             const amazonBooks = await getAmazonBooks('trump');
+            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks))
 
             res.json({
                 // thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
+                allBooks: allBooks,
             })
         }
 
@@ -188,8 +201,11 @@ app.get('/', async (req, res) => {
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+        const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks))
+        const allBooksList = allBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
         res.send(`
+            ${allBooksList}
             <h2>Book Depository:</h2> 
             ${bookDepoList}
             <h2>Amazon Books:</h2>
