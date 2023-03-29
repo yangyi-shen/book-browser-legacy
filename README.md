@@ -5,8 +5,8 @@ A website that helps you search all the major online bookstores at once for the 
 ## How to run on your computer:
 
 - Run ```git clone https://github.com/Yang-Yi-Shen/book-browser```
-- Run 'npm run devstart'
-- Cd to the 'client' folder and run 'npm start'
+- Run ```npm run devstart```
+- Cd to the 'client' folder and run ```npm start```
 
 ## Todo:
 
@@ -23,7 +23,7 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [ ] Sort books by price
 
-- [ ] Add logo of corrensponding bookstore to search results
+- [x] Add logo of corrensponding bookstore to search results
 
 - [ ] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
 
