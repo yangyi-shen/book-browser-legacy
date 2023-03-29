@@ -41,3 +41,10 @@
     object-fit: scale-down;
     padding: 5px;
 }
+
+.abebooks-icon {
+    width: min-content;
+    height: 40px;
+    object-fit: scale-down;
+    padding: 5px;
+}

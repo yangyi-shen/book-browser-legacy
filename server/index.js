@@ -14,7 +14,6 @@ app.use((req, res, next) => {
 });
 app.use(express.static('dist'));
 
-//function for scraping Thriftbooks (not working cos of captchas)
 async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
     try {
         const escapedQuery = encodeURI(query);
@@ -48,8 +47,6 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
             })
         });
 
-        console.log(pageTitles)
-
         return pageTitles;
     } catch (error) {
         console.error(error);
@@ -57,7 +54,6 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
     }
 }
 
-//function for scraping Book Depository
 async function getBookDepo(query, path = '.book-item') {
     try {
         const escapedQuery = encodeURI(query);
@@ -98,7 +94,6 @@ async function getBookDepo(query, path = '.book-item') {
     }
 }
 
-//modified function to get price and img as well
 async function getAmazonBooks(query, path = `[data-component-type = 's-search-result']`) {
     try {
         const escapedQuery = encodeURI(query);
@@ -164,6 +159,46 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
     }
 }
 
+async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
+    try {
+        const escapedQuery = encodeURI(query);
+        const response = await axios.get(`https://www.abebooks.com/servlet/SearchResults?kn=${escapedQuery}&sts=t&cm_sp=SearchF-_-topnav-_-Results&ds=20`, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+            }
+        });
+        const $ = cheerio.load(response.data);
+        let pageTitles = [];
+
+        // use cheerio to extract data from response
+        $(path).each(function (index) {
+            if (index >= 5) {
+                return false;
+            }
+
+            const image = $(this).find('.srp-item-image').attr('src');
+            const title = $(this).find('.title').text();
+            const price = $(this).find('.item-price').text();
+            const format = $(this).find(`[data-cy = 'listing-book-condition']`).text().replace('\n', '').trim();
+            const author = $(this).find('p.author a strong').text();
+
+            pageTitles.push({
+                image: image,
+                title: title,
+                price: price,
+                format: format,
+                author: author,
+                bookstore: 'abebooks',
+            });
+        });
+        
+        return pageTitles;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 function sortBooksByPrice(bookArray) {
     return bookArray.sort(function (a, b) {
       return parseFloat(a.price.replace(/[^0-9.-]+/g,"")) - parseFloat(b.price.replace(/[^0-9.-]+/g,""));
@@ -177,24 +212,28 @@ app.get('/api', async (req, res) => {
             const thriftBooks = await getThriftBooks(req.query.q);
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
-            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(thriftBooks))
+            const abeBooks = await getAbeBooks(req.query.q);
+            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(thriftBooks).concat(abeBooks))
 
             res.json({
                 thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
+                abeBooks: abeBooks,
                 allBooks: allBooks,
             })
         } else {
             const thriftBooks = await getThriftBooks('trump');
             const bookDepo = await getBookDepo('trump');
             const amazonBooks = await getAmazonBooks('trump');
-            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(thriftBooks))
+            const abeBooks = await getAbeBooks('trump');
+            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(thriftBooks).concat(abeBooks))
 
             res.json({
                 thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
+                abeBooks: abeBooks,
                 allBooks: allBooks,
             })
         }
@@ -214,6 +253,8 @@ app.get('/', async (req, res) => {
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+        const abeBooks = await getAbeBooks('trump');
+        const abeBooksList = abeBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
         res.send(`
             <h2>Book Depository:</h2> 
@@ -222,6 +263,8 @@ app.get('/', async (req, res) => {
             ${amazonBooksList}
             <h2>ThriftBooks:</h2>
             ${thriftbooksList}
+            <h2>AbeBooks:</h2>
+            ${abeBooksList}
         `);
     } catch (error) {
         console.log(error.message)

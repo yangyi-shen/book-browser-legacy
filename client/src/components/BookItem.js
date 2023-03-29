@@ -38,5 +38,18 @@ export default function BookItem(props) {
                 </div>
             </div>
         )
+    } else if (props.bookstore === 'abebooks') {
+        return (
+            <div className="book-item">
+                <img className="abebooks-icon" src="https://yt3.googleusercontent.com/ytc/AL5GRJVhhLVg_UG7gcA52uZ2VmIuWGdH9oranIjR4uTRCg=s900-c-k-c0x00ffffff-no-rj" alt="" />
+                <img className="book-image" src={props.image} alt="" />
+                <div className="book-info">
+                    <h3 className="book-title">{props.title}</h3>
+                    <p className="book-author blue">{props.author}</p>
+                    <h4 className="book-format bold blue">{props.format}</h4>
+                    <p className="book-type">{props.price}</p>
+                </div>
+            </div>
+        )
     }
 }
