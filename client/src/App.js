@@ -2,6 +2,7 @@
 import { useState, useEffect }from 'react';
 import './App.css';
 import BookItem from './components/BookItem';
+import Searchbar from './components/Searchbar';
 
 function App() {
   const [bookList, setBookList] = useState({})
@@ -33,10 +34,9 @@ function App() {
   if (bookList.bookDepo) {
     return (
       <div className='App'>
-        <input type='text' value={query} onChange={handleChange} />
-        <button type='button' onClick={handleSubmit}>Search</button>
+        <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
         <main>
-          {bookList.allBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={book.bookstore} />)}
+          {bookList.bookDepo.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={book.bookstore} />)}
         </main>
       </div>
     )
