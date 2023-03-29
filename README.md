@@ -2,9 +2,9 @@
 
 A website that helps you search all the major online bookstores at once for the best deals.
 
-## How to run:
+## How to run on your computer:
 
-- Git clone it to your computer
+- Run ```git clone https://github.com/Yang-Yi-Shen/book-browser```
 - Run 'npm run devstart'
 - Cd to the 'client' folder and run 'npm start'
 
