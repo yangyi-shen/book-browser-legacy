@@ -2,6 +2,12 @@
 
 A website that helps you search all the major online bookstores at once for the best deals.
 
+## How to run:
+
+- Git clone it to your computer
+- Run 'npm run devstart'
+- Cd to the 'client' folder and run 'npm start'
+
 ## Todo:
 
 - [x] (sorta) Figure out how to web scrape major online bookstores
