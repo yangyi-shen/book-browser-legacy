@@ -22,10 +22,13 @@ A website that helps you search all the major online bookstores at once for the 
 - [x] Make API to process multiple different queries, not just a set one
 
 - [ ] Sort books by price
+- - [x] Create function to sort by price
+- - [ ] Make sure all prices are in USD
+- - [ ] Include shipping costs
 
 - [x] Add logo of corrensponding bookstore to search results
 
-- [ ] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
+- [x] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
 
 - [ ] Add loading icon when search query is being processed
 
