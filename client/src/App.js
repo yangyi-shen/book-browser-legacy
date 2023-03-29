@@ -36,7 +36,7 @@ function App() {
       <div className='App'>
         <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
         <main>
-          {bookList.bookDepo.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={book.bookstore} />)}
+          {bookList.allBooks.map(book => <BookItem image={book.image} title={book.title} price={book.price} format={book.format} author={book.author} bookstore={book.bookstore} />)}
         </main>
       </div>
     )

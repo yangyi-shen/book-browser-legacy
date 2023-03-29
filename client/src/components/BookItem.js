@@ -25,5 +25,18 @@ export default function BookItem(props) {
                 </div>
             </div>
         )
+    } else if (props.bookstore === 'thriftbooks') {
+        return (
+            <div className="book-item">
+                <img className="thriftbooks-icon" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Logo_of_Thriftbooks.svg" alt="" />
+                <img className="book-image" src={props.image} alt="" />
+                <div className="book-info">
+                    <h3 className="book-title">{props.title}</h3>
+                    <p className="book-author blue">{props.author}</p>
+                    <h4 className="book-format bold blue">{props.format}</h4>
+                    <p className="book-type">${props.price}</p>
+                </div>
+            </div>
+        )
     }
 }

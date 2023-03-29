@@ -34,3 +34,10 @@
     object-fit: scale-down;
     padding: 5px;
 }
+
+.thriftbooks-icon {
+    width: min-content;
+    height: 25px;
+    object-fit: scale-down;
+    padding: 5px;
+}
