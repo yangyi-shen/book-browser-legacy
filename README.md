@@ -10,7 +10,7 @@ A website that helps you search all the major online bookstores at once for the 
 
 ## Todo:
 
-- [x] (sorta) Figure out how to web scrape major online bookstores
+- [ ] Figure out how to web scrape all major online bookstores
 - - [ ] BetterWorldBooks
 - - [x] AbeBooks
 - - [x] Amazon Books
@@ -21,10 +21,11 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [x] Make API to process multiple different queries, not just a set one
 
-- [ ] Sort books by price
+- [x] Sort books by price
 - - [x] Create function to sort by price
-- - [x] Make sure all prices are in USD (temporary fix)
-- - [ ] Include shipping costs
+- - [x] Make sure all prices are in USD
+
+- [ ] Include shipping costs to book price
 
 - [x] Add logo of corrensponding bookstore to search results
 
