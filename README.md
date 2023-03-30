@@ -23,7 +23,7 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [ ] Sort books by price
 - - [x] Create function to sort by price
-- - [ ] Make sure all prices are in USD
+- - [x] Make sure all prices are in USD (temporary fix)
 - - [ ] Include shipping costs
 
 - [x] Add logo of corrensponding bookstore to search results
