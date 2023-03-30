@@ -73,7 +73,8 @@ async function getBookDepo(query, path = '.book-item') {
 
             const image = $(this).find('.item-img img').attr('src');
             const title = $(this).find('.title a').text().replace('\n', '').trim();
-            const price = $(this).find('.price  .sale-price').text();
+            //convert NTD to USD (replace with scraping with set location cookie asap)
+            const price = (parseFloat($(this).find('.price  .sale-price').text().replace(/[^0-9.-]+/g,"")) / 30.4).toFixed(2);
             const format = $(this).find('.format').text().replace('\n', '').trim();
             const author = $(this).find('p.author span a span').text();
 
@@ -178,7 +179,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
 
             const image = $(this).find('.srp-item-image').attr('src');
             const title = $(this).find('.title').text();
-            const price = $(this).find('.item-price').text();
+            const price = `$${parseFloat($(this).find('.item-price').text().replace(/[^0-9.-]+/g,""))}`;
             const format = $(this).find(`[data-cy = 'listing-book-condition']`).text();
             const author = $(this).find('p.author a strong').text();
 
