@@ -179,7 +179,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
             const image = $(this).find('.srp-item-image').attr('src');
             const title = $(this).find('.title').text();
             const price = $(this).find('.item-price').text();
-            const format = $(this).find(`[data-cy = 'listing-book-condition']`).text().replace('\n', '').trim();
+            const format = $(this).find(`[data-cy = 'listing-book-condition']`).text();
             const author = $(this).find('p.author a strong').text();
 
             pageTitles.push({
@@ -189,6 +189,46 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
                 format: format,
                 author: author,
                 bookstore: 'abebooks',
+            });
+        });
+        
+        return pageTitles;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
+    try {
+        const escapedQuery = encodeURI(query);
+        const response = await axios.get(`https://www.betterworldbooks.com/search/results?q=${escapedQuery}`, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+            }
+        });
+        const $ = cheerio.load(response.data);
+        let pageTitles = [];
+
+        // use cheerio to extract data from response
+        $(path).each(function (index) {
+            if (index >= 5) {
+                return false;
+            }
+
+            const image = $(this).find(`[itemprop = 'image']`).attr('src');
+            const title = $(this).find(`[itemprop = 'name'] [itemprop = 'url]`).text();
+            const price = $(this).find('p strong span').text();
+            const format = $(this).find(`p span[itemprop = 'bookFormat']`).text();
+            const author = $(this).find(`span.author a[itemprop = 'author']`).text();
+
+            pageTitles.push({
+                image: image,
+                title: title,
+                price: price,
+                format: format,
+                author: author,
+                bookstore: 'betterworldbooks',
             });
         });
         
@@ -249,12 +289,18 @@ app.get('/', async (req, res) => {
     try {
         const thriftbooks = await getThriftBooks('trump');
         const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
+
         const amazonBooks = await getAmazonBooks('trump');
         const amazonBooksList = amazonBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+
         const abeBooks = await getAbeBooks('trump');
         const abeBooksList = abeBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+
+        // const BWB = await getBWB('trump');
+        // const BWBList = BWB.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
         res.send(`
             <h2>Book Depository:</h2> 
@@ -265,6 +311,8 @@ app.get('/', async (req, res) => {
             ${thriftbooksList}
             <h2>AbeBooks:</h2>
             ${abeBooksList}
+            <h2>BetterWorldBooks:</h2>
+            {BWBList}
         `);
     } catch (error) {
         console.log(error.message)
