@@ -14,6 +14,7 @@ app.use((req, res, next) => {
 });
 app.use(express.static('dist'));
 
+//IMPORTANT: potential solutions to web scraping problems: setting cookies, using proxies, copying http request from network section of inspect tools
 async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
     try {
         const escapedQuery = encodeURI(query);
@@ -59,7 +60,8 @@ async function getBookDepo(query, path = '.book-item') {
         const escapedQuery = encodeURI(query);
         const response = await axios.get(`https://www.bookdepository.com/search?searchTerm=${escapedQuery}&search=Find+book`, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+                'cookie': 'bd-session-id=262-8800074-2984305; bd-session-id-time=2082787201l; ENTITY_SESS_ID_UK=de913f594e84ab6be3f4f2ff624cd30c; isAuthenticated=no; hasNoSavedCards=no; bd-ubid-main=262-1691740-3449708; __zlcmid=1EzlgeT335WiHWb; bd-session-token=VUS4FYHjwpcHGW9SpptQxIyHDGJJd0BnitC9aj24y7dRJXaYhMSqSvKXTh9W53fGol+MXcbGmEmjeonK1OakP/4ZrrfvqEX1BpYFlPEocHliie5zSinsa0XULtJN4a+4Cv/tkPikd8lchAlLMUKGXC5+4zC2ZrxBsb64aksJr6l/AYtJzQIHK001Kw9IwEsXsJgAg4KWVmWQuHQeB8ZDdQ; s_gpv=home; csm-hit=tb:H9C2HCXFMCN23PHXYDXM+s-QNZ80521PMXPX5RJCZFW|1680168009488&t:1680168009488&adb:adblk_no',
             }
         });
         const $ = cheerio.load(response.data);
@@ -73,8 +75,7 @@ async function getBookDepo(query, path = '.book-item') {
 
             const image = $(this).find('.item-img img').attr('src');
             const title = $(this).find('.title a').text().replace('\n', '').trim();
-            //convert NTD to USD (replace with scraping with set location cookie asap)
-            const price = (parseFloat($(this).find('.price  .sale-price').text().replace(/[^0-9.-]+/g,"")) / 30.4).toFixed(2);
+            const price = $(this).find('.price  .sale-price').text();
             const format = $(this).find('.format').text().replace('\n', '').trim();
             const author = $(this).find('p.author span a span').text();
 
@@ -250,28 +251,28 @@ function sortBooksByPrice(bookArray) {
 app.get('/api', async (req, res) => {
     try {
         if (req.query.q != undefined) {
-            const thriftBooks = await getThriftBooks(req.query.q);
+            // const thriftBooks = await getThriftBooks(req.query.q);
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
             const abeBooks = await getAbeBooks(req.query.q);
-            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(thriftBooks).concat(abeBooks))
+            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(abeBooks))
 
             res.json({
-                thriftBooks: thriftBooks,
+                // thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
                 abeBooks: abeBooks,
                 allBooks: allBooks,
             })
         } else {
-            const thriftBooks = await getThriftBooks('trump');
+            // const thriftBooks = await getThriftBooks('trump');
             const bookDepo = await getBookDepo('trump');
             const amazonBooks = await getAmazonBooks('trump');
             const abeBooks = await getAbeBooks('trump');
-            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(thriftBooks).concat(abeBooks))
+            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(abeBooks))
 
             res.json({
-                thriftBooks: thriftBooks,
+                // thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
                 abeBooks: abeBooks,
@@ -288,8 +289,8 @@ app.get('/api', async (req, res) => {
 //localhost:6900 route for testing purposes. for final product go to localhost:3000
 app.get('/', async (req, res) => {
     try {
-        const thriftbooks = await getThriftBooks('trump');
-        const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+        // const thriftbooks = await getThriftBooks('trump');
+        // const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
@@ -309,7 +310,7 @@ app.get('/', async (req, res) => {
             <h2>Amazon Books:</h2>
             ${amazonBooksList}
             <h2>ThriftBooks:</h2>
-            ${thriftbooksList}
+            {thriftbooksList}
             <h2>AbeBooks:</h2>
             ${abeBooksList}
             <h2>BetterWorldBooks:</h2>
