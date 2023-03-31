@@ -14,6 +14,15 @@ app.use((req, res, next) => {
 });
 app.use(express.static('dist'));
 
+function truncate(text, length = 45) {
+    if (text.trim().length > length) {
+      result = text.trim().slice(0, length).trim() + "...";
+      return result;
+    }
+
+    return text; 
+}
+
 //IMPORTANT: potential solutions to web scraping problems: setting cookies, using proxies, copying http request from network section of inspect tools
 async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
     try {
@@ -33,7 +42,7 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
             }
 
             const image = $(this).find('.SearchResultTileItem-photo img').attr('src');
-            const title = $(this).find('.AllEditionsItem-tileTitle').text();
+            const title = truncate($(this).find('.AllEditionsItem-tileTitle').text());
             const price = $(this).find('.SearchResultListItem-dollarAmount').text();
             const format = $(this).find('.SearchResultTileItem-format strong').text();
             const author = $(this).find(`[itemprop = 'author']`).text();
@@ -61,7 +70,7 @@ async function getBookDepo(query, path = '.book-item') {
         const response = await axios.get(`https://www.bookdepository.com/search?searchTerm=${escapedQuery}&search=Find+book`, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-                'cookie': 'bd-session-id=262-8800074-2984305; bd-session-id-time=2082787201l; ENTITY_SESS_ID_UK=de913f594e84ab6be3f4f2ff624cd30c; isAuthenticated=no; hasNoSavedCards=no; bd-ubid-main=262-1691740-3449708; __zlcmid=1EzlgeT335WiHWb; bd-session-token=VUS4FYHjwpcHGW9SpptQxIyHDGJJd0BnitC9aj24y7dRJXaYhMSqSvKXTh9W53fGol+MXcbGmEmjeonK1OakP/4ZrrfvqEX1BpYFlPEocHliie5zSinsa0XULtJN4a+4Cv/tkPikd8lchAlLMUKGXC5+4zC2ZrxBsb64aksJr6l/AYtJzQIHK001Kw9IwEsXsJgAg4KWVmWQuHQeB8ZDdQ; s_gpv=home; csm-hit=tb:H9C2HCXFMCN23PHXYDXM+s-QNZ80521PMXPX5RJCZFW|1680168009488&t:1680168009488&adb:adblk_no',
+                'cookie': 'bd-session-id=262-8800074-2984305; bd-session-id-time=2082787201l; ENTITY_SESS_ID_UK=de913f594e84ab6be3f4f2ff624cd30c; isAuthenticated=no; hasNoSavedCards=no; bd-ubid-main=262-1691740-3449708; __zlcmid=1EzlgeT335WiHWb; s_gpv=home; bd-session-token=Duosm5KPOlTOb7atrUQVaeX6bDy5w8Xm4AOqvvhBf1132Vk95mLuMOxT/xlTidFm4zEE8cMXFo1YrQW8WNx1vuw+Vs6rOmmoDiSPlQV9Sf68Gq+cnHJsfql2huNvidqdkac+XswmkM4fJUiS9fkPNbq9XE3RtPZgOC71FyLAP6dpUDw/2U0hUib+IRXnOMfNzrArolaJ9/nm9ia3/As4iw; csm-hit=tb:F56QW8NFXM5SRAEHNWV5+s-F56QW8NFXM5SRAEHNWV5|1680232632477&t:1680232632477&adb:adblk_no',
             }
         });
         const $ = cheerio.load(response.data);
@@ -74,7 +83,7 @@ async function getBookDepo(query, path = '.book-item') {
             }
 
             const image = $(this).find('.item-img img').attr('src');
-            const title = $(this).find('.title a').text().replace('\n', '').trim();
+            const title = truncate($(this).find('.title a').text().replace('\n', '').trim());
             const price = $(this).find('.price  .sale-price').text();
             const format = $(this).find('.format').text().replace('\n', '').trim();
             const author = $(this).find('p.author span a span').text();
@@ -114,7 +123,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             }
 
             const image = $(this).find('img').attr('src');
-            const title = $(this).find('h2 a span').text();
+            const title = truncate($(this).find('h2 a span').text());
             const author = $(this).find('div.a-row.a-color-secondary > div.a-row > .a-size-base').slice(0, 2).text();
 
             //big chunk of code to come up with price and format
@@ -179,7 +188,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
             }
 
             const image = $(this).find('.srp-item-image').attr('src');
-            const title = $(this).find('.title').text();
+            const title = truncate($(this).find('.title').text());
             const price = `$${parseFloat($(this).find('.item-price').text().replace(/[^0-9.-]+/g,""))}`;
             const format = $(this).find(`[data-cy = 'listing-book-condition']`).text();
             const author = $(this).find('p.author a strong').text();
@@ -219,7 +228,7 @@ async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
             }
 
             const image = $(this).find(`[itemprop = 'image']`).attr('src');
-            const title = $(this).find(`[itemprop = 'name'] [itemprop = 'url]`).text();
+            const title = truncate($(this).find(`[itemprop = 'name'] [itemprop = 'url]`).text());
             const price = $(this).find('p strong span').text();
             const format = $(this).find(`p span[itemprop = 'bookFormat']`).text();
             const author = $(this).find(`span.author a[itemprop = 'author']`).text();
