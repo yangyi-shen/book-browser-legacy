@@ -59,8 +59,9 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
 
         return pageTitles;
     } catch (error) {
-        console.error(error);
-        throw error;
+        // console.error(error);
+        console.error(`status ${error.response.status} from Thriftbooks`);
+        return [];
     }
 }
 
@@ -101,7 +102,7 @@ async function getBookDepo(query, path = '.book-item') {
         return pageTitles;
     } catch (error) {
         console.error(error);
-        throw error;
+        return [];
     }
 }
 
@@ -166,7 +167,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
         return pageTitles;
     } catch (error) {
         console.error(error);
-        throw error;
+        return [];
     }
 }
 
@@ -206,7 +207,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
         return pageTitles;
     } catch (error) {
         console.error(error);
-        throw error;
+        return [];
     }
 }
 
@@ -245,8 +246,8 @@ async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
         
         return pageTitles;
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(`status ${error.response.status} from BetterWorldBooks`);
+        return [];
     }
 }
 
@@ -260,32 +261,36 @@ function sortBooksByPrice(bookArray) {
 app.get('/api', async (req, res) => {
     try {
         if (req.query.q != undefined) {
-            // const thriftBooks = await getThriftBooks(req.query.q);
+            const thriftBooks = await getThriftBooks(req.query.q);
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
             const abeBooks = await getAbeBooks(req.query.q);
-            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(abeBooks))
+            const BWB = await getThriftBooks(req.query.q);
+            const allBooks = sortBooksByPrice(thriftBooks.concat(bookDepo).concat(amazonBooks).concat(abeBooks).concat(BWB))
 
             res.json({
-                // thriftBooks: thriftBooks,
+                thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
                 abeBooks: abeBooks,
                 allBooks: allBooks,
+                BWB: BWB,
             })
         } else {
-            // const thriftBooks = await getThriftBooks('trump');
+            const thriftBooks = await getThriftBooks('trump');
             const bookDepo = await getBookDepo('trump');
             const amazonBooks = await getAmazonBooks('trump');
             const abeBooks = await getAbeBooks('trump');
-            const allBooks = sortBooksByPrice(bookDepo.concat(amazonBooks).concat(abeBooks))
+            const BWB = await getThriftBooks('trump');
+            const allBooks = sortBooksByPrice(thriftBooks.concat(bookDepo).concat(amazonBooks).concat(abeBooks).concat(BWB))
 
             res.json({
-                // thriftBooks: thriftBooks,
+                thriftBooks: thriftBooks,
                 bookDepo: bookDepo,
                 amazonBooks: amazonBooks,
                 abeBooks: abeBooks,
                 allBooks: allBooks,
+                BWB: BWB,
             })
         }
 
@@ -298,8 +303,8 @@ app.get('/api', async (req, res) => {
 //localhost:6900 route for testing purposes. for final product go to localhost:3000
 app.get('/', async (req, res) => {
     try {
-        // const thriftbooks = await getThriftBooks('trump');
-        // const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+        const thriftbooks = await getThriftBooks('trump');
+        const thriftbooksList = thriftbooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
         const bookDepo = await getBookDepo('trump');
         const bookDepoList = bookDepo.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} by <span style='color:#007185'>${book.author}</span></p>`).join('');
@@ -310,8 +315,8 @@ app.get('/', async (req, res) => {
         const abeBooks = await getAbeBooks('trump');
         const abeBooksList = abeBooks.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
-        // const BWB = await getBWB('trump');
-        // const BWBList = BWB.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
+        const BWB = await getBWB('trump');
+        const BWBList = BWB.map(book => `<p>${book.title} <span style='color:#007185'>${book.format}</span> ${book.price} <span style='color:#007185'>${book.author}</span></p>`).join('');
 
         res.send(`
             <h2>Book Depository:</h2> 
@@ -319,11 +324,11 @@ app.get('/', async (req, res) => {
             <h2>Amazon Books:</h2>
             ${amazonBooksList}
             <h2>ThriftBooks:</h2>
-            {thriftbooksList}
+            ${thriftbooksList}
             <h2>AbeBooks:</h2>
             ${abeBooksList}
             <h2>BetterWorldBooks:</h2>
-            {BWBList}
+            ${BWBList}
         `);
     } catch (error) {
         console.log(error.message)
