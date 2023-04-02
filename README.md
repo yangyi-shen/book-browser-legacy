@@ -25,6 +25,8 @@ A website that helps you search all the major online bookstores at once for the 
 - - [x] Create function to sort by price
 - - [x] Make sure all prices are in USD
 
+- [ ] Bypass CAPTCHAs
+
 - [ ] Include shipping costs to book price
 
 - [x] Add logo of corrensponding bookstore to search results
@@ -32,6 +34,8 @@ A website that helps you search all the major online bookstores at once for the 
 - [x] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
 
 - [x] 403 and 503 status from bookstores now no longer cause app to crash
+
+- [ ] Make UI presentable
 
 - [ ] Add loading icon when search query is being processed
 
