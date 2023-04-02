@@ -31,6 +31,8 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [x] Make Searchbar, SearchResults, BookItem React components and appropriately use them to display data from backend
 
+- [x] 403 and 503 status from bookstores now no longer cause app to crash
+
 - [ ] Add loading icon when search query is being processed
 
 - [ ] Test and release version 0.9.1
