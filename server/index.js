@@ -43,6 +43,7 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
 
             const image = $(this).find('.SearchResultTileItem-photo img').attr('src');
             const title = truncate($(this).find('.AllEditionsItem-tileTitle').text());
+            const url = $(this).find('.AllEditionsItem-tileTitle a').attr('href');
             const price = $(this).find('.SearchResultListItem-dollarAmount').text();
             const format = $(this).find('.SearchResultTileItem-format strong').text();
             const author = $(this).find(`[itemprop = 'author']`).text();
@@ -50,6 +51,7 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
             pageTitles.push({
                 image: image,
                 title: title,
+                url: url,
                 price: price,
                 format: format,
                 author: author,
@@ -85,6 +87,7 @@ async function getBookDepo(query, path = '.book-item') {
 
             const image = $(this).find('.item-img img').attr('src');
             const title = truncate($(this).find('.title a').text().replace('\n', '').trim());
+            const url = $(this).find('.title a').attr('href');
             const price = $(this).find('.price  .sale-price').text();
             const format = $(this).find('.format').text().replace('\n', '').trim();
             const author = $(this).find('p.author span a span').text();
@@ -92,6 +95,7 @@ async function getBookDepo(query, path = '.book-item') {
             pageTitles.push({
                 image: image,
                 title: title,
+                url: url,
                 price: price,
                 format: format,
                 author: author,
@@ -124,7 +128,8 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             }
 
             const image = $(this).find('img').attr('src');
-            const title = truncate($(this).find('h2 a span').text());
+            const title = truncate($(this).find('.a-section .a-section h2 a span').text());
+            const url = $(this).find('.a-section .a-section h2 a').attr('href')
             const author = $(this).find('div.a-row.a-color-secondary > div.a-row > .a-size-base').slice(0, 2).text();
 
             //big chunk of code to come up with price and format
@@ -145,6 +150,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                 pageTitles.push({
                     image: image,
                     title: title,
+                    url: url,
                     price: priceHolder['Paperback'],
                     format: 'Paperback',
                     author: author,
@@ -156,6 +162,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
                 pageTitles.push({
                     image: image,
                     title: title,
+                    url: url,
                     price: priceHolder['Hardcover'],
                     format: 'Hardcover',
                     author: author,
@@ -190,6 +197,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
 
             const image = $(this).find('.srp-item-image').attr('src');
             const title = truncate($(this).find('.title').text());
+            const url = $(this).find('.title a').attr('href')
             const price = `$${parseFloat($(this).find('.item-price').text().replace(/[^0-9.-]+/g,""))}`;
             const format = $(this).find(`[data-cy = 'listing-book-condition']`).text();
             const author = $(this).find('p.author a strong').text();
@@ -197,6 +205,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
             pageTitles.push({
                 image: image,
                 title: title,
+                url: url,
                 price: price,
                 format: format,
                 author: author,
@@ -230,6 +239,7 @@ async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
 
             const image = $(this).find(`[itemprop = 'image']`).attr('src');
             const title = truncate($(this).find(`[itemprop = 'name'] [itemprop = 'url]`).text());
+            const url = $(this).find(`[itemprop = 'name'] [itemprop = 'url]`).attr('href')
             const price = $(this).find('p strong span').text();
             const format = $(this).find(`p span[itemprop = 'bookFormat']`).text();
             const author = $(this).find(`span.author a[itemprop = 'author']`).text();
@@ -237,6 +247,7 @@ async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
             pageTitles.push({
                 image: image,
                 title: title,
+                url: url,
                 price: price,
                 format: format,
                 author: author,
