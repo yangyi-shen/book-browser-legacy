@@ -1,8 +1,8 @@
 
 import { useState, useEffect }from 'react';
 import './App.css';
-import BookItem from './components/BookItem';
 import Searchbar from './components/Searchbar';
+import SearchResult from './components/SearchResult';
 
 function App() {
   const [bookList, setBookList] = useState({})
@@ -36,7 +36,7 @@ function App() {
       <div className='App'>
         <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
         <main>
-          {bookList.allBooks.map((book, index) => <BookItem key={index} image={book.image} title={book.title} url={book.url} price={book.price} format={book.format} author={book.author} bookstore={book.bookstore} />)}
+          <SearchResult bookList={bookList.allBooks} />
         </main>
       </div>
     )
