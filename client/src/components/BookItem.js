@@ -5,7 +5,9 @@ export default function BookItem(props) {
                 <img className="amazon-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Amazon_icon.svg/1200px-Amazon_icon.svg.png?20210720180728" alt="" />
                 <img className="book-image" src={props.image} alt="" />
                 <div className="book-info">
-                    <h3 className="book-title">{props.title}</h3>
+                    <a className="book-link" href={`https://www.amazon.com${props.url}`} target="_blank" rel="noopener noreferrer" >
+                        <h3 className="book-title">{props.title}</h3>
+                    </a>
                     <p className="book-author blue">{props.author}</p>
                     <h4 className="book-format bold blue">{props.format}</h4>
                     <p className="book-type">{props.price}</p>
@@ -18,7 +20,9 @@ export default function BookItem(props) {
                 <img className="bookdepo-icon" src="https://upload.wikimedia.org/wikipedia/commons/8/8a/The_Book_Depository.svg" alt="" />
                 <img className="book-image" src={props.image} alt="" />
                 <div className="book-info">
-                    <h3 className="book-title">{props.title}</h3>
+                    <a className="book-link" href={`https://www.bookdepository.com${props.url}`} target="_blank" rel="noopener noreferrer" >
+                        <h3 className="book-title">{props.title}</h3>
+                    </a>
                     <p className="book-author blue">{props.author}</p>
                     <h4 className="book-format bold blue">{props.format}</h4>
                     <p className="book-type">{props.price}</p>
@@ -31,7 +35,9 @@ export default function BookItem(props) {
                 <img className="thriftbooks-icon" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Logo_of_Thriftbooks.svg" alt="" />
                 <img className="book-image" src={props.image} alt="" />
                 <div className="book-info">
-                    <h3 className="book-title">{props.title}</h3>
+                    <a className="book-link" href={`https://www.thriftbooks.com${props.url}`} target="_blank" rel="noopener noreferrer" >
+                        <h3 className="book-title">{props.title}</h3>
+                    </a>
                     <p className="book-author blue">{props.author}</p>
                     <h4 className="book-format bold blue">{props.format}</h4>
                     <p className="book-type">${props.price}</p>
@@ -44,7 +50,9 @@ export default function BookItem(props) {
                 <img className="abebooks-icon" src="https://yt3.googleusercontent.com/ytc/AL5GRJVhhLVg_UG7gcA52uZ2VmIuWGdH9oranIjR4uTRCg=s900-c-k-c0x00ffffff-no-rj" alt="" />
                 <img className="book-image" src={props.image} alt="" />
                 <div className="book-info">
-                    <h3 className="book-title">{props.title}</h3>
+                    <a className="book-link" href={`https://www.abebooks.com${props.url}`} target="_blank" rel="noopener noreferrer" >
+                        <h3 className="book-title">{props.title}</h3>
+                    </a>
                     <p className="book-author blue">{props.author}</p>
                     <h4 className="book-format bold blue">{props.format}</h4>
                     <p className="book-type">{props.price}</p>
