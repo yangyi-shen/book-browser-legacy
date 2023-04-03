@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 });
 app.use(express.static('dist'));
 
-function truncate(text, length = 45) {
+function truncate(text, length = 40) {
     if (text.trim().length > length) {
       result = text.trim().slice(0, length).trim() + "...";
       return result;
@@ -22,6 +22,7 @@ function truncate(text, length = 45) {
 
     return text; 
 }
+const truncateAuthors = 30;
 
 //IMPORTANT: potential solutions to web scraping problems: setting cookies, using proxies, copying http request from network section of inspect tools
 async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
@@ -46,7 +47,7 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
             const url = $(this).find('.AllEditionsItem-tileTitle a').attr('href');
             const price = $(this).find('.SearchResultListItem-dollarAmount').text();
             const format = $(this).find('.SearchResultTileItem-format strong').text();
-            const author = $(this).find(`[itemprop = 'author']`).text();
+            const author = truncate($(this).find(`[itemprop = 'author']`).text(), truncateAuthors);
 
             pageTitles.push({
                 image: image,
@@ -90,7 +91,7 @@ async function getBookDepo(query, path = '.book-item') {
             const url = $(this).find('.title a').attr('href');
             const price = $(this).find('.price  .sale-price').text();
             const format = $(this).find('.format').text().replace('\n', '').trim();
-            const author = $(this).find('p.author span a span').text();
+            const author = truncate($(this).find('p.author span a span').text(), truncateAuthors);
 
             pageTitles.push({
                 image: image,
@@ -130,7 +131,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
             const image = $(this).find('img').attr('src');
             const title = truncate($(this).find('.a-section .a-section h2 a span').text());
             const url = $(this).find('.a-section .a-section h2 a').attr('href')
-            const author = $(this).find('div.a-row.a-color-secondary > div.a-row > .a-size-base').slice(0, 2).text();
+            const author = truncate($(this).find('div.a-row.a-color-secondary > div.a-row > .a-size-base').slice(0, 2).text(), truncateAuthors);
 
             //big chunk of code to come up with price and format
             let priceList = [];
@@ -200,7 +201,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
             const url = $(this).find('.title a').attr('href')
             const price = `$${parseFloat($(this).find('.item-price').text().replace(/[^0-9.-]+/g,""))}`;
             const format = $(this).find(`[data-cy = 'listing-book-condition']`).text();
-            const author = $(this).find('p.author a strong').text();
+            const author = truncate($(this).find('p.author a strong').text(), truncateAuthors);
 
             pageTitles.push({
                 image: image,
@@ -242,7 +243,7 @@ async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
             const url = $(this).find(`[itemprop = 'name'] [itemprop = 'url]`).attr('href')
             const price = $(this).find('p strong span').text();
             const format = $(this).find(`p span[itemprop = 'bookFormat']`).text();
-            const author = $(this).find(`span.author a[itemprop = 'author']`).text();
+            const author = truncate($(this).find(`span.author a[itemprop = 'author']`).text(), truncateAuthors);
 
             pageTitles.push({
                 image: image,
