@@ -1,7 +1,7 @@
 export default function LoadingScreen() {
     return (
-        <div className='App'>
-            <h2>loading...</h2>
-        </div>
+        <section id="loading-screen">
+            <h1>Loading...</h1>
+        </section>
     )
 }

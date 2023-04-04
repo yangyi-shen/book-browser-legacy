@@ -40,7 +40,10 @@ function App() {
 
   if (loading) {
     return (
-      <LoadingScreen />
+      <div className='App'>
+          <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
+          <LoadingScreen />
+      </div>
     )
   } else {
     return (

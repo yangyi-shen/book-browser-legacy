@@ -57,6 +57,11 @@ header * {
     background-color: #f0ab46;
 }
 
+#loading-screen {
+    display: flex;
+    justify-content: center;
+}
+
 main {
     background-color: lightgrey;
     text-align: center;
