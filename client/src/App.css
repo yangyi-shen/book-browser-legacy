@@ -65,7 +65,7 @@ header * {
 main {
     background-color: lightgrey;
     text-align: center;
-    padding: 5px 0px;
+    padding: 5px 0px 0px;
 }
 
 .book-item {
@@ -138,4 +138,13 @@ main {
     height: 40px;
     object-fit: scale-down;
     padding: 5px;
+}
+
+#copyright {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0px;
+    background-color: black;
+    color: white;
 }

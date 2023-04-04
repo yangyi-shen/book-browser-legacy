@@ -4,6 +4,7 @@ import './App.css';
 import LoadingScreen from './components/LoadingScreen';
 import Searchbar from './components/Searchbar';
 import SearchResult from './components/SearchResult';
+import Footer from './components/Footer';
 
 function App() {
   const [bookList, setBookList] = useState({})
@@ -43,6 +44,7 @@ function App() {
       <div className='App'>
           <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
           <LoadingScreen />
+          <Footer />
       </div>
     )
   } else {
@@ -51,6 +53,7 @@ function App() {
         <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
         <main>
           <SearchResult bookList={bookList.allBooks} />
+          <Footer />
         </main>
       </div>
     )
