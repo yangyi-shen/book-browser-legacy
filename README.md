@@ -37,6 +37,6 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [x] Make UI presentable
 
-- [ ] Add loading icon when search query is being processed
+- [x] Add loading icon when search query is being processed
 
 - [ ] Test and release version 0.9.1
