@@ -1,0 +1,30 @@
+{
+    "builds": [
+      {
+        "src": "server/index.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "client/package.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "buildCommand": "npm install && npm run build",
+          "outputDirectory": "client/build"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "server/index.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "client/build/$1"
+      }
+    ],
+    "env": {
+      "API_KEY": "xxxx"
+    }
+}
+  
