@@ -14,7 +14,7 @@ A website that helps you search all the major online bookstores at once for the 
 - - [ ] BetterWorldBooks
 - - [x] AbeBooks
 - - [x] Amazon Books
-- - [x] ThriftBooks
+- - [ ] ThriftBooks
 - - [x] Book Depository
 
 - [x] Process web scraped data into list of books
@@ -25,7 +25,7 @@ A website that helps you search all the major online bookstores at once for the 
 - - [x] Create function to sort by price
 - - [x] Make sure all prices are in USD
 
-- [ ] Bypass CAPTCHAs
+- [ ] Bypass CAPTCHA to scrape ThriftBooks
 
 - [ ] Include shipping costs to book price
 
