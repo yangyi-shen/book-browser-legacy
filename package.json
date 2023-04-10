@@ -24,6 +24,7 @@
     "cors": "^2.8.5",
     "create-react-app": "^5.0.1",
     "express": "^4.18.2",
-    "nodemon": "^2.0.21"
+    "nodemon": "^2.0.21",
+    "wait-on": "^7.0.1"
   }
 }
