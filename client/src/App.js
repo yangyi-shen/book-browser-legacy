@@ -15,7 +15,9 @@ function App() {
   async function fetchData(query) {
     setLoading(true)
 
-    await fetch(`http://localhost:6900/api?q=${query}`)
+    await fetch(`http://localhost:6900/api?q=${query}`, {
+      referrerPolicy: "unsafe-url"
+    })
     .then(response => response.json())
     .then(booklist => {
       setBookList(booklist)
