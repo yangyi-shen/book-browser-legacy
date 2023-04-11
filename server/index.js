@@ -1,4 +1,6 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -348,6 +350,11 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`listening at port ${PORT}`)
+const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt')
+};
+
+https.createServer(options, app).listen(PORT, () => {
+    console.log(`HTTPS server running on port ${PORT}`);
 });
