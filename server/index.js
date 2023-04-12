@@ -350,11 +350,6 @@ app.get('/', async (req, res) => {
     }
 });
 
-const options = {
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.crt')
-};
-
-https.createServer(options, app).listen(PORT, () => {
-    console.log(`HTTPS server running on port ${PORT}`);
-});
+app.listen(PORT, () => {
+    console.log(`running on port ${PORT}`)
+})
