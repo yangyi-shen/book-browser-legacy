@@ -113,6 +113,7 @@ main {
 }
 
 .amazon-icon {
+    max-width: 100%;
     width: min-content;
     height: 25px;
     object-fit: scale-down;
@@ -120,6 +121,7 @@ main {
 }
 
 .bookdepo-icon {
+    max-width: 100%;
     width: min-content;
     height: 30px;
     object-fit: scale-down;
@@ -127,6 +129,7 @@ main {
 }
 
 .thriftbooks-icon {
+    max-width: 100%;
     width: min-content;
     height: 25px;
     object-fit: scale-down;
@@ -134,6 +137,7 @@ main {
 }
 
 .abebooks-icon {
+    max-width: 100%;
     width: min-content;
     height: 40px;
     object-fit: scale-down;
