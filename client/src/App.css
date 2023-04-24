@@ -57,6 +57,12 @@ header * {
     background-color: #f0ab46;
 }
 
+#landing-page {
+    width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
 #loading-screen {
     display: flex;
     justify-content: center;

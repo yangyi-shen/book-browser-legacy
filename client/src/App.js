@@ -1,6 +1,7 @@
 
-import { useState, useEffect }from 'react';
+import { useState }from 'react';
 import './App.css';
+import LandingPage from './components/LandingPage';
 import LoadingScreen from './components/LoadingScreen';
 import Searchbar from './components/Searchbar';
 import SearchResult from './components/SearchResult';
@@ -9,10 +10,12 @@ import Footer from './components/Footer';
 function App() {
   const [bookList, setBookList] = useState({})
   const [query, setQuery] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [start, setStart] = useState(true)
 
   //NOTE: SEARCH api now working. work on putting query inside Searchbar component into fetch() url
   async function fetchData(query) {
+    setStart(false)
     setLoading(true)
 
     await fetch(`https://book-browser-backend.vercel.app/api?q=${query}`, {
@@ -27,11 +30,6 @@ function App() {
     setLoading(false)
   }
 
-  //get search results for trump on load
-  useEffect(() => {
-    fetchData('trump');
-  }, [])
-
   function handleChange(event) {
     setQuery(event.target.value)
   }
@@ -41,7 +39,14 @@ function App() {
     fetchData(query)
   }
 
-  if (loading) {
+  if (start) {
+    return (
+      <div className='App'>
+          <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
+          <LandingPage />
+      </div>
+    )
+  } else if (loading) {
     return (
       <div className='App'>
           <Searchbar value={query} handleChange={handleChange} handleSubmit={handleSubmit} />
