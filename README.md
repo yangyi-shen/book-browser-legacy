@@ -1,20 +1,13 @@
 # Book Browser 📚
 
-A website that helps you search all the major online bookstores at once for the best deals.
-
-## How to run on your computer:
-
-- Run ```git clone https://github.com/Yang-Yi-Shen/book-browser```
-- Run ```npm run devstart```
-- Cd to the 'client' folder and run ```npm start```
-
+A website that helps you search all the major online bookstores at once for the best deals. Check it out [here!](book-browser-delta.vercel.app)
 ## Todo:
 
 - [ ] Figure out how to web scrape all major online bookstores
 - - [ ] BetterWorldBooks
 - - [x] AbeBooks
 - - [x] Amazon Books
-- - [ ] ThriftBooks
+- - [x] ThriftBooks
 - - [x] Book Depository
 
 - [x] Process web scraped data into list of books
@@ -39,4 +32,4 @@ A website that helps you search all the major online bookstores at once for the 
 
 - [x] Add loading icon when search query is being processed
 
-- [ ] Test and release version 0.9.1
+- [x] Test and release version 0.9.0
