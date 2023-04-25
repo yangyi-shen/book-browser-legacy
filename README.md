@@ -1,6 +1,8 @@
 # Book Browser 📚
 
 A website that helps you search all the major online bookstores at once for the best deals. Check it out [here!](book-browser-delta.vercel.app)
+
+This was built with React & NodeJS.
 ## Todo:
 
 - [ ] Figure out how to web scrape all major online bookstores
