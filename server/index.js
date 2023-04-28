@@ -279,7 +279,7 @@ app.get('/api', async (req, res) => {
             const bookDepo = await getBookDepo(req.query.q);
             const amazonBooks = await getAmazonBooks(req.query.q);
             const abeBooks = await getAbeBooks(req.query.q);
-            const BWB = await getThriftBooks(req.query.q);
+            const BWB = await getBWB(req.query.q);
             const allBooks = sortBooksByPrice(thriftBooks.concat(bookDepo).concat(amazonBooks).concat(abeBooks).concat(BWB))
 
             res.json({
