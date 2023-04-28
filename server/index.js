@@ -24,7 +24,9 @@ function truncate(text, length = 40) {
 
     return text; 
 }
+
 const truncateAuthors = 30;
+const queryLength = 10;
 
 //IMPORTANT: potential solutions to web scraping problems: setting cookies, using proxies, copying http request from network section of inspect tools
 async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
@@ -40,7 +42,7 @@ async function getThriftBooks(query, path = '.AllEditionsItem-tile') {
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
-            if (index >= 5) {
+            if (index >= queryLength) {
                 return false;
             }
 
@@ -84,7 +86,7 @@ async function getBookDepo(query, path = '.book-item') {
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
-            if (index >= 5) {
+            if (index >= queryLength) {
                 return false;
             }
 
@@ -126,7 +128,7 @@ async function getAmazonBooks(query, path = `[data-component-type = 's-search-re
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
-            if (index >= 5) {
+            if (index >= queryLength) {
                 return false;
             }
 
@@ -194,7 +196,7 @@ async function getAbeBooks(query, path = `[data-cy = 'listing-item']`) {
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
-            if (index >= 5) {
+            if (index >= queryLength) {
                 return false;
             }
 
@@ -236,7 +238,7 @@ async function getBWB(query, path = `[itemtype = 'http://schema.org/Book']`) {
 
         // use cheerio to extract data from response
         $(path).each(function (index) {
-            if (index >= 5) {
+            if (index >= queryLength) {
                 return false;
             }
 
